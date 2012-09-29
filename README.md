@@ -29,13 +29,15 @@ Built for the app chicago hackathon.
     url(r'^singly/', include('singly.urls')),
 
  - Make sure you've added "django.core.context_processors.request" to your TEMPLATE_CONTEXT_PROCESSORS.
+ 
+ - Define settings.SINGLY_CALLBACK_REDIRECT (Or keep the default of "/")
 
 #### Usage
 
-{% load singly %}
-{% if user.is_authenticated %}
-Welcome, {{user.username}}
-{% else %}
-<a href="{% singly_login_url 'facebook' %}">Login With Facebook</a>
-<a href="{% singly_login_url 'twitter' %}">Login With Twitter</a>
-{% endif %}
+    {% load singly %}
+    {% if user.is_authenticated %}
+    Welcome, {{user.username}}
+    {% else %}
+    <a href="{% singly_login_url 'facebook' %}">Login With Facebook</a>
+    <a href="{% singly_login_url 'twitter' %}">Login With Twitter</a>
+    {% endif %}
