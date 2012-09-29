@@ -8,3 +8,5 @@ class SinglyProfile(models.Model):
     access_token = models.CharField(max_length=255)
     account = models.CharField(max_length=255)
     
+    def __unicode__(self):
+        return "Profile for '%s'" % self.user
