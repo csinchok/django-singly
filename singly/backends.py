@@ -31,7 +31,6 @@ class SinglyBackend(object):
                 user.save()
                 return user
             except SinglyProfile.DoesNotExist:
-                print("Creating new user...")
                 profile_response = requests.get("https://api.singly.com/v0/profile", params={'access_token': access_token})
                 user_kwargs = {'username': account}
                 if profile_response.status_code == 200:
@@ -45,12 +44,8 @@ class SinglyBackend(object):
                         except IndexError:
                             pass
                     user_kwargs['email'] = profile_response.json.get('email')
-                else:
-                    print(profile_response.text)
                 user = User(**user_kwargs)
                 user.save()
                 SinglyProfile.objects.create(user=user, account=account, access_token=access_token)
                 return user
-        else:
-            print("[%s] %s" % (response.status_code, response.text))
         return None
