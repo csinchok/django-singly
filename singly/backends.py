@@ -29,7 +29,9 @@ class SinglyBackend(object):
             try:
                 profile = SinglyProfile.objects.get(account=account).user
                 profile.access_token = access_token
-                profile.profile = profile_response.text
+                profile_response = requests.get("https://api.singly.com/v0/profile", params={'access_token': access_token})
+                if profile_response.status_code == 200:
+                    profile.profile = profile_response.text
                 profile.save()
                 return profile.user
             except SinglyProfile.DoesNotExist:
