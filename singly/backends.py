@@ -1,4 +1,5 @@
 import requests
+import json
 
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -26,10 +27,11 @@ class SinglyBackend(object):
             access_token = response.json.get('access_token')
             account = response.json.get('account')
             try:
-                user = SinglyProfile.objects.get(account=account).user
-                user.access_token = access_token
-                user.save()
-                return user
+                profile = SinglyProfile.objects.get(account=account).user
+                profile.access_token = access_token
+                profile.profile = profile_response.text
+                profile.save()
+                return profile.user
             except SinglyProfile.DoesNotExist:
                 profile_response = requests.get("https://api.singly.com/v0/profile", params={'access_token': access_token})
                 user_kwargs = {'username': account}
@@ -46,6 +48,6 @@ class SinglyBackend(object):
                     user_kwargs['email'] = profile_response.json.get('email')
                 user = User(**user_kwargs)
                 user.save()
-                SinglyProfile.objects.create(user=user, account=account, access_token=access_token)
+                SinglyProfile.objects.create(user=user, account=account, access_token=access_token, profile=profile_response.text)
                 return user
         return None
