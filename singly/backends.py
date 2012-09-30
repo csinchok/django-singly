@@ -6,7 +6,9 @@ from django.conf import settings
 from singly.models import SinglyProfile
 
 class SinglyBackend(object):
-   
+    
+    supports_inactive_user = False
+    
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)
