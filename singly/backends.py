@@ -27,7 +27,7 @@ class SinglyBackend(object):
             access_token = response.json.get('access_token')
             account = response.json.get('account')
             try:
-                profile = SinglyProfile.objects.get(account=account).user
+                profile = SinglyProfile.objects.get(account=account)
                 profile.access_token = access_token
                 profile_response = requests.get("https://api.singly.com/v0/profile", params={'access_token': access_token})
                 if profile_response.status_code == 200:
